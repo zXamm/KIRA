@@ -55,6 +55,15 @@ class Lexer:
                 self.advance()
                 self.add_token(self.SINGLE_CHARS[ch], ch, start_line, start_col)
 
+            elif ch.isalpha():
+                word = ""
+                while self.peek() != "" and (self.peek().isalnum() or self.peek() == "_"):
+                    word += self.advance()
+                if word in KEYWORDS:
+                    self.add_token("KEYWORD", word, start_line, start_col)
+                else:
+                    self.add_token("IDENTIFIER", word, start_line, start_col)
+
             else:
                 self.advance()
                 self.add_error(self.line, self.col, f"Unexpected character: {ch}")
