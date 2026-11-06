@@ -1,0 +1,5 @@
+# this whole line is ignored
+x = 1; # also ignored
+if (a <= b) { }
+a == b != c < d > e >= f
+!x

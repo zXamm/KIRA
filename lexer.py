@@ -71,13 +71,30 @@ class Lexer:
                 if self.peek() != "" and (self.peek().isalpha() or self.peek() == "_"):
                     while self.peek() != "" and (self.peek().isalnum() or self.peek() == "_"):
                         num += self.advance()
-                    self.add_error(start_line, start_col, f"malformed token: '{num}'")
+                    self.add_error(start_line, start_col, f"malformed token '{num}'")
                 else:
                     self.add_token("INTEGER", num, start_line, start_col)
 
+            elif ch in "=<>!":
+                self.advance()
+                if self.peek() == "=":
+                    self.advance()
+                    self.add_token("REL_OP", ch + "=", start_line, start_col)
+                elif ch == "=":
+                    self.add_token("ASSIGN", ch, start_line, start_col)
+                elif ch == "!":
+                    self.add_error(start_line, start_col, f"invalid character '{ch}'")
+                else:
+                    self.add_token("REL_OP", ch, start_line, start_col)
+
+            elif ch == "#":
+                # skip comment until end of line
+                while self.peek() != "" and self.peek() != "\n":
+                    self.advance()
+
             else:
                 self.advance()
-                self.add_error(start_line, start_col, f"invalid character: '{ch}'")
+                self.add_error(start_line, start_col, f"invalid character '{ch}'")
 
         self.add_token(EOF, "", self.line, self.col)
         return self.tokens, self.errors
@@ -94,3 +111,5 @@ if __name__ == "__main__":
         print(t)    
     for e in errs:
         print(e)
+
+    print("Total tokens:", len(toks) - 1)   # -1 because EOF is not counted
