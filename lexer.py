@@ -1,4 +1,4 @@
-from token_def import Token, KEYWORDS, EOF
+from token_def import Token, KEYWORDS, EOF, TOKEN_TYPES
 
 class Lexer:
     def __init__(self, source):
@@ -102,14 +102,40 @@ class Lexer:
 def tokenize(source):
     return Lexer(source).tokenize()
 
-# Just for testing the lexer from the command line before kira.py is ready to use it.
+def print_token_stream(tokens, errors):
+    print("TOKEN STREAM")
+    print("+------+------+--------------+----------------+")
+    print("| Line | Col  | Type         | Lexeme         |")
+    print("+------+------+--------------+----------------+")
+    for t in tokens:
+        if t.type == EOF:
+            continue
+        print(f"| {t.line:<4} | {t.col:<4} | {t.type:<12} | {t.lexeme:<14} |")
+    print("+------+------+--------------+----------------+")
+    if errors:
+        print(f"\n{len(errors)} lexical error(s) found:")
+        for e in errors:
+            print("  " + e)
+
+
+def print_token_counts(tokens):
+    counts = {}
+    for t in tokens:
+        if t.type != EOF:
+            counts[t.type] = counts.get(t.type, 0) + 1
+
+    total = sum(counts.values())
+    print("\nTOKEN COUNTS")
+    for ty in TOKEN_TYPES:
+        if ty in counts:
+            print(f"  {ty:<12} : {counts[ty]:>3}")
+    print("  " + "-" * 18)
+    print(f"  {'TOTAL':<12} : {total:>3}")
+
+# Just for testing the lexer from the command line before kira.py is ready to use it. (Later, will be remove)
 if __name__ == "__main__":
     import sys
     with open(sys.argv[1], encoding="utf-8") as f:
         toks, errs = tokenize(f.read())
-    for t in toks:
-        print(t)    
-    for e in errs:
-        print(e)
-
-    print("Total tokens:", len(toks) - 1)   # -1 because EOF is not counted
+    print_token_stream(toks, errs)
+    print_token_counts(toks)
