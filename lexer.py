@@ -64,9 +64,20 @@ class Lexer:
                 else:
                     self.add_token("IDENTIFIER", word, start_line, start_col)
 
+            elif ch.isdigit():
+                num = ""
+                while self.peek() != "" and self.peek().isdigit():
+                    num += self.advance()
+                if self.peek() != "" and (self.peek().isalpha() or self.peek() == "_"):
+                    while self.peek() != "" and (self.peek().isalnum() or self.peek() == "_"):
+                        num += self.advance()
+                    self.add_error(start_line, start_col, f"malformed token: '{num}'")
+                else:
+                    self.add_token("INTEGER", num, start_line, start_col)
+
             else:
                 self.advance()
-                self.add_error(self.line, self.col, f"Unexpected character: {ch}")
+                self.add_error(start_line, start_col, f"invalid character: '{ch}'")
 
         self.add_token(EOF, "", self.line, self.col)
         return self.tokens, self.errors
