@@ -55,21 +55,21 @@ class Lexer:
                 self.advance()
                 self.add_token(self.SINGLE_CHARS[ch], ch, start_line, start_col)
 
-            elif ch.isalpha():
+            elif ch.isascii() and ch.isalpha():
                 word = ""
-                while self.peek() != "" and (self.peek().isalnum() or self.peek() == "_"):
+                while self.peek() != "" and (self.peek().isascii() and self.peek().isalnum() or self.peek() == "_"):
                     word += self.advance()
                 if word in KEYWORDS:
                     self.add_token("KEYWORD", word, start_line, start_col)
                 else:
                     self.add_token("IDENTIFIER", word, start_line, start_col)
 
-            elif ch.isdigit():
+            elif ch.isascii() and ch.isdigit():
                 num = ""
-                while self.peek() != "" and self.peek().isdigit():
+                while self.peek() != "" and self.peek().isascii() and self.peek().isdigit():
                     num += self.advance()
-                if self.peek() != "" and (self.peek().isalpha() or self.peek() == "_"):
-                    while self.peek() != "" and (self.peek().isalnum() or self.peek() == "_"):
+                if self.peek() != "" and (self.peek().isascii() and self.peek().isalpha() or self.peek() == "_"):
+                    while self.peek() != "" and (self.peek().isascii() and self.peek().isalnum() or self.peek() == "_"):
                         num += self.advance()
                     self.add_error(start_line, start_col, f"malformed token '{num}'")
                 else:
@@ -105,7 +105,7 @@ def tokenize(source):
 # Just for testing the lexer from the command line before kira.py is ready to use it.
 if __name__ == "__main__":
     import sys
-    with open(sys.argv[1]) as f:
+    with open(sys.argv[1], encoding="utf-8") as f:
         toks, errs = tokenize(f.read())
     for t in toks:
         print(t)    
