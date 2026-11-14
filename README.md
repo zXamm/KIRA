@@ -2,7 +2,7 @@
 
 CPT316 Assignment 1: lexer and parser for the KIRA language.
 
-## Group Assignment
+## Group 23
 
 | Member | Matric No. | Role |
 |---|---|---|
