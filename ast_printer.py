@@ -1,9 +1,4 @@
-"""AST node, expression parser and AST display for KIRA (Aiman's part).
-
-Everything here is written in functional style: pure functions, immutable
-data, recursion / reduce instead of loops, and no global variables.
-Only print_ast and write_dot do I/O.
-"""
+""" AST node, expression parser and AST display for KIRA (Aiman's part)."""
 from collections import namedtuple
 from functools import reduce
 
