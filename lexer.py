@@ -131,11 +131,3 @@ def print_token_counts(tokens):
             print(f"  {ty:<12} : {counts[ty]:>3}")
     print("  " + "-" * 18)
     print(f"  {'TOTAL':<12} : {total:>3}")
-
-# Just for testing the lexer from the command line before kira.py is ready to use it. (Later, will be remove)
-if __name__ == "__main__":
-    import sys
-    with open(sys.argv[1], encoding="utf-8") as f:
-        toks, errs = tokenize(f.read())
-    print_token_stream(toks, errs)
-    print_token_counts(toks)
