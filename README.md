@@ -13,7 +13,7 @@ CPT316 Assignment 1: lexer and parser for the KIRA language.
 
 ## Requirements
 
-- Language: Python 
+- Language: Python 3.12
 - No external libraries needed
 
 ## How to run
