@@ -4,7 +4,6 @@ Used by the lexer (creates tokens) and the parser (reads tokens).
 Do not change without telling the group. See TOKENS.md.
 """
 
-# Token types, in the order they are printed in TOKEN COUNTS
 TOKEN_TYPES = [
     "KEYWORD",
     "IDENTIFIER",
@@ -27,10 +26,10 @@ KEYWORDS = {"let", "if", "else", "while", "print"}
 
 class Token:
     def __init__(self, type, lexeme, line, col):
-        self.type = type      # e.g. "KEYWORD"
-        self.lexeme = lexeme  # always a string, e.g. "let", "42"
-        self.line = line      # starts from 1
-        self.col = col        # starts from 1
+        self.type = type     
+        self.lexeme = lexeme  
+        self.line = line      
+        self.col = col       
 
     def __repr__(self):
         return f"Token({self.type}, {self.lexeme!r}, {self.line}, {self.col})"
