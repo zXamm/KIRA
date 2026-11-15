@@ -1,23 +1,3 @@
-"""Statements and blocks.
- 
-Functional style, so every function takes (tokens, pos) and returns (node, pos)
- 
-Grammar without left recursion:
- 
-    program    -> item { item } EOF
-    item       -> decl | stmt
-    decl       -> 'let' id '=' expr ';'
-    stmt       -> assign | if_stmt | while_stmt | print_stmt
-    assign     -> id '=' expr ';'
-    if_stmt    -> 'if' '(' cond ')' block [ 'else' block ]
-    while_stmt -> 'while' '(' cond ')' block
-    print_stmt -> 'print' '(' expr ')' ';'
-    block      -> '{' stmt { stmt } '}'
- 
-decl is only allowed at top level, so block has no decl
-expr and cond come from ast_printer.py
-"""
-
 from ast_printer import (
     node,
     syntax_error,
@@ -33,9 +13,8 @@ def is_keyword(tok, word):
 
 
 def expect(tokens, pos, tok_type, shown):
-    """Check that tokens[pos] has type tok_type.Then return pos + 1
-    'shown' is how the missing token appears in the error message
-    """
+
+    # Check that tokens[pos] has type tok_type.Then return pos + 1. 'shown' is how the missing token appears in the error message
     if tokens[pos].type != tok_type:
         raise syntax_error(tokens[pos], shown)
     return pos + 1
@@ -52,7 +31,7 @@ def let_in_block_error(tok):
 # Simple statements
 def parse_decl(tokens, pos):
     """'let' id '=' expr ';'   ->  Let <name> / <expr>"""
-    after_let = pos + 1                                   # 'let' already checked
+    after_let = pos + 1                                  
     name_tok = tokens[after_let]
     after_id = expect(tokens, after_let, "IDENTIFIER", "an identifier")
     after_eq = expect(tokens, after_id, "ASSIGN", "'='")
@@ -89,10 +68,8 @@ def parse_print(tokens, pos):
 
 # Blocks, if, while
 def parse_stmts_until_rbrace(tokens, pos, acc):
-    """Collects statements until the closing '}' (the '}' itself is not consumed).
-
-    I used recursion here instead of a loop. acc holds the statements seen so far.
-    """
+    #Collects statements until the closing '}' (the '}' itself is not consumed)
+    # Using recursion here instead of a loop. acc holds the statements seen so far
     tok = tokens[pos]
     if tok.type == "RBRACE":
         return acc, pos
@@ -112,7 +89,7 @@ def parse_block(tokens, pos, label):
 
 
 def parse_else_part(tokens, pos):
-    # Optional 'else' block. Returns (tuple of 0 or 1 Else nodes, pos)
+    # Optional 'else' block. Returns tuple of 0 or 1 Else nodes, pos
     if is_keyword(tokens[pos], "else"):
         else_node, after = parse_block(tokens, pos + 1, "Else")
         return (else_node,), after
